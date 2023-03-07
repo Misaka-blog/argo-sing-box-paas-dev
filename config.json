@@ -1,0 +1,169 @@
+{
+	"log": {
+		"disabled": false,
+		"level": "info",
+		"output": "/dev/null",
+		"timestamp": true
+	},
+	"dns": {
+		"servers": [
+			{
+				"tag": "google-tls",
+				"address": "local",
+				"address_strategy": "prefer_ipv4",
+				"strategy": "ipv4_only",
+				"detour": "direct"
+			},
+			{
+				"tag": "google-udp",
+				"address": "8.8.8.8",
+				"address_strategy": "prefer_ipv4",
+				"strategy": "prefer_ipv4",
+				"detour": "direct"
+			}
+		],
+		"strategy": "prefer_ipv4",
+		"disable_cache": false,
+		"disable_expire": false
+	},
+	"inbounds": [
+		{
+			"type": "vmess",
+			"tag": "vmess-in",
+			"listen": "0.0.0.0",
+			"listen_port": 10000,
+			"tcp_fast_open": false,
+			"sniff": false,
+			"sniff_override_destination": false,
+			"domain_strategy": "prefer_ipv4",
+			"proxy_protocol": false,
+			"users": [
+				{
+					"name": "Misaka-blog",
+					"uuid": "UUID",
+					"alterId": 0
+				}
+			],
+			"transport": {
+				"type": "ws",
+				"path": "VMESS_WSPATH"
+			}
+		},
+		{
+			"type": "vless",
+			"tag": "vless-in",
+			"listen": "0.0.0.0",
+			"listen_port": 20000,
+			"tcp_fast_open": false,
+			"sniff": false,
+			"sniff_override_destination": false,
+			"domain_strategy": "prefer_ipv4",
+			"proxy_protocol": false,
+			"users": [
+				{
+					"name": "Misaka-blog",
+					"uuid": "UUID"
+				}
+			],
+			"transport": {
+				"type": "ws",
+				"path": "VLESS_WSPATH"
+			}
+		},
+		{
+			"type": "trojan",
+			"tag": "trojan-in",
+			"listen": "0.0.0.0",
+			"listen_port": 30000,
+			"tcp_fast_open": false,
+			"sniff": false,
+			"sniff_override_destination": false,
+			"domain_strategy": "prefer_ipv4",
+			"proxy_protocol": false,
+			"users": [
+				{
+					"name": "Misaka-blog",
+					"password": "UUID"
+				}
+			],
+			"transport": {
+				"type": "ws",
+				"path": "TROJAN_WSPATH"
+			}
+		}
+	],
+	"outbounds": [
+		{
+			"type": "direct",
+			"tag": "direct"
+		},
+		{
+			"type": "block",
+			"tag": "block"
+		},
+		{
+			"type": "dns",
+			"tag": "dns-out"
+		},
+		{
+			"tag": "wireguard-out",
+			"type": "wireguard",
+			"interface_name": "wgcf",
+			"local_address": [
+				"172.16.0.2/32",
+				"2606:4700:110:8f0a:fcdb:db2f:3b3:4d49/128"
+			],
+			"mtu": 1408,
+			"peer_public_key": "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=",
+			"private_key": "GAl2z55U2UzNU5FG+LW3kowK+BA/WGMi1dWYwx20pWk=",
+			"server": "engage.cloudflareclient.com",
+			"server_port": 2408,
+			"system_interface": false
+		}
+	],
+	"route": {
+		"rules": [
+			{
+				"protocol": "dns",
+				"outbound": "dns-out"
+			},
+			{
+				"inbound": [
+					"vmess-in",
+					"vless-in",
+					"trojan-in"
+				],
+				"geosite": [
+					"cn",
+					"category-ads-all"
+				],
+				"geoip": "cn",
+				"outbound": "block"
+			},
+			{
+				"inbound": [
+					"vmess-in",
+					"vless-in",
+					"trojan-in"
+				],
+				"domain": [
+					"openai.com",
+					"ai.com"
+				],
+				"outbound": "wireguard-out"
+			}
+		],
+		"geoip": {
+			"path": "geoip.db",
+			"download_url": "https://github.com/SagerNet/sing-geoip/releases/latest/download/geoip.db",
+			"download_detour": "direct"
+		},
+		"geosite": {
+			"path": "geosite.db",
+			"download_url": "https://github.com/SagerNet/sing-geosite/releases/latest/download/geosite.db",
+			"download_detour": "direct"
+		},
+		"final": "direct",
+		"auto_detect_interface": true
+	}
+}
