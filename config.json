@@ -133,12 +133,11 @@
 					"vless-in",
 					"trojan-in"
 				],
-				"geosite": [
-					"cn",
-					"category-ads-all"
+				"domain": [
+					"openai.com",
+					"ai.com"
 				],
-				"geoip": "cn",
-				"outbound": "block"
+				"outbound": "wireguard-out"
 			},
 			{
 				"inbound": [
@@ -146,11 +145,12 @@
 					"vless-in",
 					"trojan-in"
 				],
-				"domain": [
-					"openai.com",
-					"ai.com"
+				"geosite": [
+					"cn",
+					"category-ads-all"
 				],
-				"outbound": "wireguard-out"
+				"geoip": "cn",
+				"outbound": "block"
 			}
 		],
 		"geoip": {
