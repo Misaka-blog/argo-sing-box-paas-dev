@@ -133,7 +133,7 @@
 					"vless-in",
 					"trojan-in"
 				],
-				"domain": [
+				"domain_keyword": [
 					"openai.com",
 					"ai.com"
 				],
