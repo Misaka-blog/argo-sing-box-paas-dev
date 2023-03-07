@@ -7,7 +7,6 @@ VLESS_WSPATH=${VLESS_WSPATH:-'/vl'}
 TROJAN_WSPATH=${TROJAN_WSPATH:-'/tr'}
 sed -i "s#UUID#$UUID#g;s#VMESS_WSPATH#${VMESS_WSPATH}#g;s#VLESS_WSPATH#${VLESS_WSPATH}#g;s#TROJAN_WSPATH#${TROJAN_WSPATH}#g" config.json
 sed -i "s#VMESS_WSPATH#${VMESS_WSPATH}#g;s#VLESS_WSPATH#${VLESS_WSPATH}#g;s#TROJAN_WSPATH#${TROJAN_WSPATH}#g" /etc/nginx/nginx.conf
-sed -i "s#RELEASE_RANDOMNESS#${RELEASE_RANDOMNESS}#g" /etc/supervisor/conf.d/supervisord.conf
 
 # 设置 nginx 伪装站
 rm -rf /usr/share/nginx/*
